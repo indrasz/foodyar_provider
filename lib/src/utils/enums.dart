@@ -4,3 +4,8 @@ enum ResultState {
   hasData,
   error
 }
+
+enum MenuType {
+  food,
+  drink
+}

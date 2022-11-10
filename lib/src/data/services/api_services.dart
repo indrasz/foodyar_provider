@@ -1,48 +1,42 @@
 import 'dart:convert';
+import 'package:foodyar/src/data/models/restaurant.dart';
+import 'package:foodyar/src/data/models/restaurant_detail.dart';
+import 'package:foodyar/src/data/models/search_restaurant_model.dart';
 import 'package:http/http.dart' as http;
-import 'package:foodyar/src/res/res.dart';
 import 'package:foodyar/src/utils/constants.dart';
-import 'package:foodyar/src/data/repositories/repositories.dart';
 
 class ApiService {
-  Future<RestaurantRepository> getList() async {
-    try {
-      final response = await http.get(Uri.parse(ApiEndPoint.kApiList));
-      if (response.statusCode == 200) {
-        return RestaurantRepository.fromJson(json.decode(response.body));
-      } else {
-        throw Exception(failedGetData);
-      }
-    } catch (e) {
-      throw Exception(e);
+
+  Future<RestaurantModel> getListRestaurant() async {
+    final response = await http.get(
+      Uri.parse(ApiEndPoint.kApiList),
+    );
+    if (response.statusCode == 200) {
+      return RestaurantModel.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to load data');
     }
   }
 
-  Future<RestaurantRepository> search({String query = ""}) async {
-    try {
-      final response = await http.get(
-        Uri.parse('${ApiEndPoint.kApiSearch}?q=$query'),
-      );
-      if (response.statusCode == 200) {
-        return RestaurantRepository.fromJson(
-          json.decode(response.body),
-        );
-      } else {
-        throw Exception(failedGetData);
-      }
-    } catch (e) {
-      throw Exception(e);
+  Future<SearchRestaurantModel> searchRestaurant(String query) async {
+    final response = await http.get(
+      Uri.parse('${ApiEndPoint.kApiSearch}?q=$query'),
+    );
+    if (response.statusCode == 200) {
+      return SearchRestaurantModel.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to load data');
     }
   }
 
-  Future<RestaurantDetailRepository> getDetail(String id) async {
+  Future<DetailRestaurantModel> getRestaurantById(String id) async {
     final response = await http.get(Uri.parse('${ApiEndPoint.kApiDetail}/$id'));
     if (response.statusCode == 200) {
-      return RestaurantDetailRepository.fromJson(
-        json.decode(response.body),
-      );
+      var dataJson = jsonDecode(response.body);
+      var data = dataJson['restaurant'];
+      return DetailRestaurantModel.fromJson(data);
     } else {
-      throw Exception(failedGetData);
+      throw Exception('Failed to load detail data');
     }
   }
 }

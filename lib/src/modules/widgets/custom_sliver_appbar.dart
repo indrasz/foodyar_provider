@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:foodyar/src/modules/provider/app_provider.dart';
+import 'package:foodyar/src/data/providers/restaurant_provider.dart';
 
 class CustomSliverAppBar extends SliverPersistentHeaderDelegate {
   final double expandedHeight;
-  final AppProvider provider;
+  final RestaurantProvider provider;
 
   CustomSliverAppBar({required this.expandedHeight, required this.provider});
 
@@ -33,23 +33,21 @@ class CustomSliverAppBar extends SliverPersistentHeaderDelegate {
                 height: 50,
                 width: MediaQuery.of(context).size.width,
                 child: Form(
-                  child: Container(
-                    child: TextFormField(
-                      onChanged: (value) {
-                        if (value.length >= 3) {
-                          provider.onSearch(value);
-                        } else if (value.isEmpty) {
-                          provider.onSearch(value);
-                        }
-                      },
-                      decoration: const InputDecoration(
-                        hintText: "Search restaurant or menu",
-                        suffixIcon: Icon(Icons.search),
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.only(
-                          left: 10,
-                          top: 15,
-                        ),
+                  child: TextFormField(
+                    onChanged: (value) {
+                      // if (value.length >= 3) {
+                      //   provider.onSearch(value);
+                      // } else if (value.isEmpty) {
+                      //   provider.onSearch(value);
+                      // }
+                    },
+                    decoration: const InputDecoration(
+                      hintText: "Search restaurant or menu",
+                      suffixIcon: Icon(Icons.search),
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.only(
+                        left: 10,
+                        top: 15,
                       ),
                     ),
                   ),
