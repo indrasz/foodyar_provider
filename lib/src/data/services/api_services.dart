@@ -25,7 +25,7 @@ class ApiService {
     if (response.statusCode == 200) {
       return SearchRestaurantModel.fromJson(jsonDecode(response.body));
     } else {
-      throw Exception('Failed to load data');
+      throw Exception('Failed to Load data');
     }
   }
 

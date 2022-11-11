@@ -28,7 +28,6 @@ class _DetailPageState extends State<DetailPage> {
         apiService: ApiService(),
         id: widget.id,
       ),
-      // AppProvider(apiService: ApiService()).getRestaurant(id),
       child: Scaffold(
         body: Consumer<DetailRestaurantProvider>(
           builder: (context, state, _) {
@@ -106,8 +105,15 @@ class _DetailPageState extends State<DetailPage> {
           pinned: true,
           floating: true,
           expandedHeight: 250.0,
+          backgroundColor: kUnavailableColor,
           flexibleSpace: FlexibleSpaceBar(
-            title: Text(restaurant.name),
+            title: Text(
+              restaurant.name,
+              style: greyTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: bold,
+              ),
+            ),
             background: Hero(
               tag: restaurant.id,
               child: Image(
@@ -199,19 +205,19 @@ class _DetailPageState extends State<DetailPage> {
                     children: restaurant.categories
                         .map(
                           (item) => Padding(
-                        padding: const EdgeInsets.only(right: 5.0),
-                        child: Chip(
-                          backgroundColor: kInactiveColor,
-                          label: Text(
-                            item.name,
-                            style: blackTextStyle.copyWith(
-                              fontSize: 16,
-                              fontWeight: semiBold,
+                            padding: const EdgeInsets.only(right: 5.0),
+                            child: Chip(
+                              backgroundColor: kInactiveColor,
+                              label: Text(
+                                item.name,
+                                style: blackTextStyle.copyWith(
+                                  fontSize: 16,
+                                  fontWeight: semiBold,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                    )
+                        )
                         .toList(),
                   ),
 

@@ -1,32 +1,47 @@
 
-import 'dart:convert';
+import 'dart:io';
 
-import 'package:foodyar/src/data/models/restaurant.dart';
+import 'package:flutter/foundation.dart';
+import 'package:foodyar/src/data/models/search_restaurant_model.dart';
+import 'package:foodyar/src/data/services/api_services.dart';
+import 'package:foodyar/src/utils/enums.dart';
 
-SearchRestaurantModel searchRestaurantModelFromJson(String str) => SearchRestaurantModel.fromJson(json.decode(str));
+class SearchRestaurantProvider extends ChangeNotifier {
+  final ApiService apiService;
 
-String searchRestaurantModelToJson(SearchRestaurantModel data) => json.encode(data.toJson());
+  SearchRestaurantProvider({required this.apiService, required String query}) {
+    _getSearchRestaurant(query);
+  }
+  late SearchRestaurantModel _restResult;
+  late ResultState _state;
+  String _message = '';
 
-class SearchRestaurantModel {
-  SearchRestaurantModel({
-    required this.error,
-    required this.founded,
-    required this.restaurants,
-  });
+  SearchRestaurantModel get restResult => _restResult;
+  ResultState get state => _state;
+  String get message => _message;
 
-  bool error;
-  int founded;
-  List<Restaurant> restaurants;
-
-  factory SearchRestaurantModel.fromJson(Map<String, dynamic> json) => SearchRestaurantModel(
-        error: json["error"],
-        founded: json["founded"],
-        restaurants: List<Restaurant>.from(json["restaurants"].map((x) => Restaurant.fromJson(x))),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "error": error,
-        "founded": founded,
-        "restaurants": List<dynamic>.from(restaurants.map((x) => x.toJson())),
-      };
+  Future<dynamic> _getSearchRestaurant(String query) async {
+    try {
+      _state = ResultState.loading;
+      notifyListeners();
+      final result = await apiService.searchRestaurant(query);
+      if (result.restaurants.isEmpty) {
+        _state = ResultState.noData;
+        notifyListeners();
+        _message = 'Empty data';
+      } else {
+        _state = ResultState.hasData;
+        notifyListeners();
+        return _restResult = result;
+      }
+    } on SocketException catch (_) {
+      _state = ResultState.error;
+      notifyListeners();
+      return _message = 'No internet connection';
+    } catch (e) {
+      _state = ResultState.error;
+      notifyListeners();
+      return _message = 'Error -> $e';
+    }
+  }
 }

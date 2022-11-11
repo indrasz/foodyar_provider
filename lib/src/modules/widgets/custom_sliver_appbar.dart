@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:foodyar/src/data/providers/restaurant_provider.dart';
+import 'package:foodyar/src/data/providers/search_restaurant_provider.dart';
 
 class CustomSliverAppBar extends SliverPersistentHeaderDelegate {
   final double expandedHeight;
-  final RestaurantProvider provider;
+  final SearchRestaurantProvider provider;
 
   CustomSliverAppBar({required this.expandedHeight, required this.provider});
 
@@ -34,22 +35,18 @@ class CustomSliverAppBar extends SliverPersistentHeaderDelegate {
                 width: MediaQuery.of(context).size.width,
                 child: Form(
                   child: TextFormField(
-                    onChanged: (value) {
-                      // if (value.length >= 3) {
-                      //   provider.onSearch(value);
-                      // } else if (value.isEmpty) {
-                      //   provider.onSearch(value);
-                      // }
-                    },
+                    // onChanged: (value) {
+                    //   if (value.length >= 3) {
+                    //     provider.onSearch(value);
+                    //   } else if (value.isEmpty) {
+                    //     provider.onSearch(value);
+                    //   }
+                    // },
                     decoration: const InputDecoration(
-                      hintText: "Search restaurant or menu",
-                      suffixIcon: Icon(Icons.search),
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.only(
-                        left: 10,
-                        top: 15,
-                      ),
-                    ),
+                        hintText: "Search restaurant or menu",
+                        suffixIcon: Icon(Icons.search),
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.only(left: 10, top: 15)),
                   ),
                 ),
               ),
